@@ -1,0 +1,9 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory 'c:/Users/natal/OneDrive/Documentos/ALGORITMIA/TrabajoFinal'
+gcc -c -g matriz.c -o matriz.o -Wall
+ 
+gcc -c -g normalizar.c -o normalizar.o -Wall
+gcc -g main.c matriz.o normalizar.o -o main -Wall
+./main
+make.exe: Leaving directory 'c:/Users/natal/OneDrive/Documentos/ALGORITMIA/TrabajoFinal'
+ 
