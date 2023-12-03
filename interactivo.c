@@ -61,8 +61,7 @@ int main() {
         }
     }
 
-    normalizarDatosConMinMax(datosEntrenamiento, cantidadFilasEntrenamiento,
-                             cantidadColumnas, min_atributos, max_atributos);
+    normalizarDatosConMinMax(datosEntrenamiento, cantidadFilasEntrenamiento, cantidadColumnas, min_atributos, max_atributos);
 
     printf("Introduce 0 si desea introducir un dato de prueba o 1 si desea "
            "probarlo con un dataset de prueba: ");
@@ -74,14 +73,11 @@ int main() {
             printf("Error al abrir el archivo\n");
             return 1;
         }
-        leerDatos(archivoPrueba, &datosPrueba, &cantidadFilasPrueba,
-                  &cantidadColumnas, &nombresAtributos);
-        normalizarDatosConMinMax(datosPrueba, cantidadFilasPrueba, cantidadColumnas,
-                                 min_atributos, max_atributos);
+        leerDatos(archivoPrueba, &datosPrueba, &cantidadFilasPrueba, &cantidadColumnas, &nombresAtributos);
+        normalizarDatosConMinMax(datosPrueba, cantidadFilasPrueba, cantidadColumnas, min_atributos, max_atributos);
 
         for (int i = 0; i < cantidadFilasPrueba; i++) {
-            prediccion = knn(datosEntrenamiento, cantidadFilasEntrenamiento,
-                             &datosPrueba[i], k, cantidadColumnas);
+            prediccion = knn(datosEntrenamiento, cantidadFilasEntrenamiento, &datosPrueba[i], k, cantidadColumnas);
 
             if (prediccion == 1 && datosPrueba[i].match == 1) {
                 verdaderosPositivos++;
@@ -107,12 +103,12 @@ int main() {
         datosPrueba->v = (double *)malloc(cantidadColumnas * sizeof(double));
 
         printf("Ingrese los datos para el nuevo dato de prueba:\n");
-        for (int i = 0; i < cantidadColumnas; i++) {
+        for (int i = 0; i < cantidadColumnas - 1; i++) {
             printf("Ingrese el valor para '%s': ", nombresAtributos[i]);
             scanf("%lf", &datosPrueba->v[i]);
         }
         datosPrueba->match = knn(datosEntrenamiento, cantidadFilasEntrenamiento, datosPrueba, k, cantidadColumnas);
-        printf("La predicción es: %d\n", datosPrueba->match);
+        printf("La prediccion es: %d\n", datosPrueba->match);
 
         free(datosPrueba->v);
         free(datosPrueba);
@@ -136,6 +132,7 @@ void leerDatos(FILE *archivo, Dato **datos, int *cantidadFilas,
     char linea[LONGMAX];
     *cantidadColumnas = 0;
     *cantidadFilas = 0;
+    *nombresAtributos = malloc(19 * sizeof(char *));
 
     // Obtener la primera línea del archivo para determinar el número de columnas
     // La primera linea de la base de datos son los nombres de los atributos
@@ -143,6 +140,8 @@ void leerDatos(FILE *archivo, Dato **datos, int *cantidadFilas,
     fgets(linea, sizeof(linea), archivo);
     char *token = strtok(linea, ";");
     while (token != NULL) {
+        (*nombresAtributos)[*cantidadColumnas] = (char*) malloc((strlen(token) + 1) * sizeof(char));
+        strcpy((*nombresAtributos)[*cantidadColumnas], token);
         (*cantidadColumnas)++;
         token = strtok(NULL, ";");
     }
